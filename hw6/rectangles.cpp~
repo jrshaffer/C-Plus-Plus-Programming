@@ -1,0 +1,451 @@
+/*
+  File: rectangles.cpp
+  Created by: Joseph Shaffer
+  Creation Date: November 16, 2016
+  Synopsis: This program asks the user
+  to enter the names, x-coordinates,
+  y-coordinates, length and height of 
+  however many rectangles the user wants.
+  The x and y coordinates of each individual
+  rectangle is that rectangle's bottom left
+  point. The program will then output the name
+  location, length, height, area, perimeter,
+  and midpoint of each rectangle the user created 
+  and the program will also output all the same 
+  information for each rectangle, but each 
+  original rectangle will be scaled by a factor of
+  3, meaning any attributes of each rectangle that
+  changes due to the scaling by 3 will be shown in
+  the output of the program.
+*/
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+/* Class point represents a point. Has two 
+   private fields representing the point's 
+   x and y coordinates and 4 member functions
+   to either set the coordinates or retrieve
+   them 
+*/
+class Point
+{
+private:
+	double px;
+	double py;
+
+public:
+	void setX(const double x);
+	void setY(const double y);
+	double getX() const;
+	double getY() const;
+};
+
+/* class Rectangle represents a rectangle
+   object and has 4 private fields, a string
+   for the name of the rectangle, a point for
+   the bottom left point, and the length and height
+   of the rectangle. This class has 12 member functions.
+   3 of these functions are used to set the private 
+   fields of the class. 4 of these functions are used
+   to retrieve the information stored in the private 
+   fields. The last 5 functions, allow the user to 
+   compute the area, midpoint, perimeter of the rectangle,
+   and to display the information of the rectangle, and 
+   scale the rectangle by a factor of 3
+*/
+class Rectangle
+{
+private:
+	string name;
+	Point blPoint;
+	double length, height;
+
+public:
+	// member functions
+	void setName(const string & inName);
+	void setBottomLeft(const double x, const double y);
+	void setDimensions(const double inLength, const double inHeight);
+
+	string getName() const;
+	Point getBottomLeft() const;
+	double getLength() const;
+	double getHeight() const;
+	
+	double area() const;
+	double perimeter() const;
+	Point midPoint() const;
+	void scaleBy3();
+	void display() const;
+};
+
+// FUNCTION PROTOTYPES GO HERE:
+
+// banner simply outputs the welcome banner and relevant information to the user
+void banner();
+
+/* recName determines if the name given to a rectangle object by the user is valid or not.
+   The first parameter is a constant string by reference that prompts the user for the 
+   name of the rectangle. If the name provided by the user is invalid due to the name not
+   starting with 'rec' or by having invalid characters in it, the function will output 
+   the second parameter which is a constant string by reference. If the user enters a name
+   already used by another rectangle the function outputs the second parameter which is constant
+   and passed by reference. The third parameter is a string passed by reference and not constant
+   since the value of that string will change in the function. The final parameter is the vector
+   containing all the rectangle objects and it is constant and passed by reference, as we 
+   only read the previous names given to the previous rectangle objects and do not change the
+   content of the rectangle objects.
+*/
+bool recName(const string &prompt, const string &error1, const string &error2, string &name, const vector<Rectangle> &rectangles);
+
+/* bottomLeft is used to prompt the user for the x and y coordinates of the bottom left point
+   of the rectangle. The first parameter is the prompt of type string and it is constant and 
+   passed by reference. The second and third parameters are both of type double and passed by 
+   reference as they represent the x and y coordinates and their values will be changed in
+   the function.
+*/
+void bottomLeft(const string &prompt, double &x, double &y);
+
+
+/* lengthHeight is used to prompt the user for the length and height
+   of the rectangle. The first parameter is the prompt of type string and it is constant and 
+   passed by reference. The second and third parameters are both of type double and passed by 
+   reference as they represent the length and height and their values will be changed in
+   the function.
+*/
+void lengthHeight(const string &prompt, double &length, double &height);
+
+/* addToRectangles takes 6 parameters, 5 parameters are constant as they
+   represent the fields of a particular rectangle. The rectangle object is
+   created in this function and all its fields are set to the corresponding
+   parameters. Finally the last parameter is the vector containing all the 
+   rectangle objects and is passed by reference as this function will add the 
+   new rectangle object to the back of the vector of rectangle objects.
+*/
+void addToRectangles(const string &recName, const double x, const double y, const double length, const double height, vector<Rectangle> &rectangles);
+
+/* displayRectangles uses the member functions scaleBy3() and display()
+   of the rectangle object to display all the information regarding each
+   rectangle created by the user, which are all the rectangles in the 
+   vector of rectangle objects, which is passed by reference to the function.
+   This function displays all the information the program has or computes for 
+   each rectangle and then displays all the information again for the same 
+   rectangle but when the rectangle is scaled by a factor of 3
+*/
+void displayRectangles(vector<Rectangle> &rectangles);
+
+int main()
+{
+	// Define your local variables, e.g. a vector of class Rectangle
+	const string prompt1("Enter the name of the first rectangle: ");
+	const string prompt2("Enter the name of the next rectangle: ");
+	const string error1("Invalid input. Type 'rec' followed by the name or 'stop' if done.\n");
+	const string error2("This name is already being used!\n");
+	vector<Rectangle> rectangles;
+	string name;
+	double x, y, length, height;
+	
+
+	// Display welcome banner
+	banner();
+
+	/* Prompt user for first rectangle or 'stop' */
+	// WHILE user input is invalid
+		// Display "Try again! "
+	while(!(recName(prompt1, error1, error2, name, rectangles))) {
+		cout << "Try again! ";
+	}
+
+	// IF user input is not 'stop'
+	if (name != "stop") {
+		// Extract rectangle name from user input
+
+		// Prompt for bottom left point
+		
+		bottomLeft("Enter " + name + "'s bottom left x and y coords: ", x, y);
+
+		// Prompt for length and height
+		lengthHeight("Enter " + name + "'s length and height: ", length, height);		
+		
+		// Add rectangle to the rectangle list
+		addToRectangles(name, x, y, length, height, rectangles);
+	}
+		
+	/* Prompt user for next rectangle or 'stop' */
+	
+	// WHILE user input is not 'stop'
+	while (name != "stop") {
+		// Display "Thank you! "
+		cout << "Thank you! ";
+
+		cin.ignore();
+		// WHILE user input is invalid
+		while(!(recName(prompt2, error1, error2, name, rectangles))) {
+			cout << "Try again! ";
+		}
+		// IF user input is not 'stop'
+		if (name != "stop") {
+			// Extract rectangle name from user input
+			// Prompt for bottom left point
+			bottomLeft("Enter " + name + "'s bottom left x and y coords: ", x, y);
+
+			// Prompt for length and height
+			lengthHeight("Enter " + name + "'s length and height: ", length, height);	
+		
+			// Add rectangle to the rectangle list
+			addToRectangles(name, x, y, length, height, rectangles);
+		}
+	}
+
+	cout << endl;
+	// IF the rectangle list is not empty
+	if (rectangles.size() != 0) {
+		cout << "You have " << rectangles.size() << " rectangle(s) in your list:\n";
+		displayRectangles(rectangles);
+		// Display all rectangles in the rectangle list
+	}
+	// ELSE 
+	else {
+		cout << "You have no rectangles in your list." << endl;
+		// Display that no rectangles are in the list
+  	}
+
+  return 0; // End program
+}
+		 
+// FUNCTION DEFINITIONS GO HERE:
+			 
+// CLASS MEMBER FUNCTION DEFINITINOS GO HERE:
+
+
+// member function that sets x-coordinate of a point
+void Point::setX(const double x) 
+{
+	px = x;
+}
+
+// member function that sets y-coordinate of a point
+void Point::setY(const double y) 
+{
+	py = y;
+}
+
+// member function that returns x-coordinate of a point
+double Point::getX() const 
+{
+	return (px);
+}
+
+// member function that returns y-coordinate of a point
+double Point::getY() const 
+{
+	return (py);
+}
+
+// member function that sets name of a rectangle
+void Rectangle::setName(const string & inName) 
+{
+	name = inName;
+}
+
+// member function that sets x and y coordinates of the bottom left point of a rectangle
+void Rectangle::setBottomLeft(const double x, const double y) 
+{
+	blPoint.setX(x);
+	blPoint.setY(y);
+}
+
+// member function that sets length and height of rectangle
+void Rectangle::setDimensions(const double inLength, const double inHeight) 
+{
+	length = inLength;
+	height = inHeight;
+}
+
+// member function that returns the name of a rectangle
+string Rectangle::getName() const
+{
+	return name;
+}
+
+// member function that returns bottom left point of rectangle
+Point Rectangle::getBottomLeft() const
+{
+	return blPoint;
+}
+
+// member function that returns length of rectangle
+double Rectangle::getLength() const
+{
+	return length;
+}
+
+// member function that returns height of rectangle
+double Rectangle::getHeight() const
+{
+	return height;
+}
+
+// member function that returns area of rectangle
+double Rectangle::area() const
+{
+	return length * height;
+}
+
+// member function the returns perimeter of rectangle
+double Rectangle::perimeter() const
+{
+	return (2.0 * length) + (2.0 * height);
+}
+
+// member function that returns midpoint of rectangle
+Point Rectangle::midPoint() const
+{
+	Point mid;
+	//double x = blPoint.getX() + (length / 2.0);
+	//double y = blPoint.getY() + (height / 2.0);
+	mid.setX(blPoint.getX() + (length / 2.0));
+	mid.setY(blPoint.getY() + (height / 2.0)); 
+	return mid;
+}
+
+// member function that changes fields of rectangles to represent scaling by 3
+void Rectangle::scaleBy3() 
+{	
+	//double x = blPoint.getX() - length;
+	//double y = blPoint.getY() - height;
+	setBottomLeft(blPoint.getX() - length, blPoint.getY() - height);
+	setDimensions(length * 3, height * 3);
+	
+}
+
+void Rectangle::display() const
+{
+	cout << "Location is (" << blPoint.getX() << ", " << blPoint.getY() << "), Length is " << length << ", Height is " << height << "; Area is " << area() << ", Perimeter is " << perimeter() << ", Midpoint is located at (" << midPoint().getX() << ", " << midPoint().getY() << ")\n";
+}			
+
+// banner simply outputs the welcome banner and relevant information to the user
+void banner() {
+	cout << "Welcome! Create your own list of rectangles.\nYou will be asked to provide information about each rectangle in your list by name.\nType the word 'stop' for the rectangle name when you are done.\n\n";
+}
+
+/* recName determines if the name given to a rectangle object by the user is valid or not.
+   The first parameter is a constant string by reference that prompts the user for the 
+   name of the rectangle. If the name provided by the user is invalid due to the name not
+   starting with 'rec' or by having invalid characters in it, the function will output 
+   the second parameter which is a constant string by reference. If the user enters a name
+   already used by another rectangle the function outputs the second parameter which is constant
+   and passed by reference. The third parameter is a string passed by reference and not constant
+   since the value of that string will change in the function. The final parameter is the vector
+   containing all the rectangle objects and it is constant and passed by reference, as we 
+   only read the previous names given to the previous rectangle objects and do not change the
+   content of the rectangle objects.
+*/
+bool recName(const string &prompt, const string &error1, const string &error2, string &name, const vector<Rectangle> &rectangles) {
+	cout << prompt;
+	getline(cin, name);
+	if (name.substr(0, 4) == "stop") {
+		return true;
+	}
+	if (name.substr(0, 4) != "rec " || (name[4] < 'a' || name[4] >'z')) {
+		cout << error1;
+		return false;
+	} else {
+		name = name.substr(4, name.length() - 1);
+		for (int i = 0; i < rectangles.size(); i++) {
+			if (name == rectangles[i].getName()) {
+				cout << error2;
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+/* bottomLeft is used to prompt the user for the x and y coordinates of the bottom left point
+   of the rectangle. The first parameter is the prompt of type string and it is constant and 
+   passed by reference. The second and third parameters are both of type double and passed by 
+   reference as they represent the x and y coordinates and their values will be changed in
+   the function.
+*/
+void bottomLeft(const string &prompt, double &x, double &y) {
+	cout << prompt;
+	cin >> x >> y;
+}
+
+/* lengthHeight is used to prompt the user for the length and height
+   of the rectangle. The first parameter is the prompt of type string and it is constant and 
+   passed by reference. The second and third parameters are both of type double and passed by 
+   reference as they represent the length and height and their values will be changed in
+   the function.
+*/
+void lengthHeight(const string &prompt, double &length, double &height) {
+	cout << prompt;
+	cin >> length >> height;
+	while (length <= 0 || height <= 0) {
+		cout << "Make length and height positive values. Try again. " << endl;
+		cout << prompt;
+		cin >> length >> height;
+	}
+	cout << endl;
+}
+
+/* addToRectangles takes 6 parameters, 5 parameters are constant as they
+   represent the fields of a particular rectangle. The rectangle object is
+   created in this function and all its fields are set to the corresponding
+   parameters. Finally the last parameter is the vector containing all the 
+   rectangle objects and is passed by reference as this function will add the 
+   new rectangle object to the back of the vector of rectangle objects.
+*/
+void addToRectangles(const string &recName, const double x, const double y, const double length, const double height, vector<Rectangle> &rectangles) {
+	Rectangle rectangle;
+	rectangle.setName(recName);
+	rectangle.setBottomLeft(x, y);
+	rectangle.setDimensions(length, height);
+	rectangles.push_back(rectangle);
+}
+
+/* displayRectangles uses the member functions scaleBy3() and display()
+   of the rectangle object to display all the information regarding each
+   rectangle created by the user, which are all the rectangles in the 
+   vector of rectangle objects, which is passed by reference to the function.
+   This function displays all the information the program has or computes for 
+   each rectangle and then displays all the information again for the same 
+   rectangle but when the rectangle is scaled by a factor of 3
+*/
+void displayRectangles(vector<Rectangle> &rectangles) {
+	for (int i = 0; i < rectangles.size(); i++) {
+		cout << endl;
+		cout << "Rectangle '" << rectangles[i].getName() << "' : ";
+		rectangles[i].display();
+		cout << "     After scale by 3: ";
+		rectangles[i].scaleBy3();
+		rectangles[i].display();
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
