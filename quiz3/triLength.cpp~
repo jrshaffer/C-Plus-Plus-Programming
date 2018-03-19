@@ -1,0 +1,37 @@
+// File: triLength.cpp
+// Created by: Joseph Shaffer
+// Created on: September 16, 2016
+
+/* This program prompts the user for
+   the lengths of 2 sides of a triangle
+   and the angle between those 2 sides.
+   Then the program calculates the length 
+   of the third side and returns that 
+   value to the user 
+*/
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main () {
+	
+	double a, b, radians, degrees, c;
+
+	cout << "Enter length of side A: ";
+	cin >> a;
+
+	cout << "Enter length of side B: ";
+	cin >> b;
+
+	cout << "Enter angle between sides A and B (degrees): ";
+	cin >> degrees;
+
+	radians = degrees * M_PI / 180;
+	
+	c = sqrt(pow(a, 2.0) + pow(b, 2.0) - 2 * a * b * cos(radians));
+
+	cout << "Length of side C is " << c << "." << endl;
+
+	return 0;
+}

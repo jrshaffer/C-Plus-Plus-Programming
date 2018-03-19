@@ -1,0 +1,42 @@
+/*
+  File: is_prime.cpp
+  Created by: Joseph Shaffer
+  Creation Date: October 7, 2016
+  Synopsis:
+  This program determines if an input value is a prime number
+*/
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+  bool isprime(true); // set is prime initially to true
+  int i, number; // declare i and number
+
+  cout << "Enter an integer greater than 2: "; // ask for number greater than 2
+  cin >> number; // initialize input to number
+  cout << endl; // new line
+  
+  i = 2; // initialize i to 2
+  // increment i from 2 to one less than number inputted
+  for (i; i < number; i++) {
+	if (number % i == 0) { // if number can be divided by i, then not prime
+		isprime = false;
+	}
+  }
+  
+// print out if prime 
+  if (isprime) {
+	cout << "The value " << number << ": PRIME." << endl;
+  }
+// print out if not prime
+  else
+  {
+	cout << "The value " << number << ": NOT PRIME." << endl;
+  }
+
+// End program
+  return 0;
+}

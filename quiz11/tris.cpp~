@@ -1,0 +1,143 @@
+/*
+  File: tris.cpp
+  Created by: Joseph Shaffer	
+  Creation Date: December 2, 2016
+  Synopsis: This program asks the user for
+  the coordinates of the bottom left point of a
+  triangle, it also asks the user for the length
+  and height of the triangle. The program will return
+  the coordinates of the bottom left point, the length,
+  the height, and the area of the triangle.
+*/
+
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+class Triangle
+{
+private:
+	double locx, locy;
+	double length, height;
+
+public:
+	// member functions
+	void setBottomLeftX(const double x);
+	void setBottomLeftY(const double y);
+	void setLength(const double inLength);
+	void setHeight(const double inHeight);
+
+	double getBottomLeftX() const;
+	double getBottomLeftY() const;
+	double getLength() const;
+	double getHeight() const;
+	
+	double area() const;
+	void display() const;
+};
+
+// FUNCTION PROTOTYPES GO HERE:
+void read_triangle(Triangle & tri);
+
+int main()
+{
+	// Define local variables
+	Triangle tri;
+	
+	//Prompt the user for triangle information and fill Class Triangle object, tri,
+	//with this information
+	read_triangle(tri);
+	
+	// Display triangle information
+	tri.display();
+		
+	return 0;
+}
+		 
+// FUNCTION DEFINITIONS GO HERE:
+			 
+// CLASS MEMBER FUNCTION DEFINITINOS GO HERE:
+
+void Triangle::setBottomLeftX(const double x) 
+{
+	locx = x;
+}
+
+void Triangle::setBottomLeftY(const double y) 
+{
+	locy = y;
+}
+
+void Triangle::setLength(const double inLength) 
+{
+	length = inLength;
+}
+
+void Triangle::setHeight(const double inHeight) 
+{
+	height = inHeight;
+}
+
+double Triangle::getBottomLeftX() const
+{
+	return locx;
+}
+
+double Triangle::getBottomLeftY() const
+{
+	return locy;
+}
+
+double Triangle::getLength() const
+{
+	return length;
+}
+
+double Triangle::getHeight() const
+{
+	return height;
+}
+
+// returns area of triangle
+double Triangle::area() const
+{
+	return 0.5 * length * height;
+}
+
+// displays fields of triangle
+void Triangle::display() const
+{
+	cout << endl; // empty line
+	cout << "----------------------------------------" << endl;
+	cout << "Lower Left Vertex (" << locx << ", " << locy << ")" << endl; // bottom left point
+	cout << "Dimensions (" << length << ", " << height << ")" << endl; // length and height
+	cout << "Area = " << area() << endl;				// area
+	cout << "----------------------------------------" << endl;
+	cout << endl;	// empty line
+}
+
+// reads in the private fields of the parameter from user
+void read_triangle(Triangle & tri)
+{	
+	double x; // for all user inputs
+	// set x coordinate
+	cout << "Enter bottom left x coordinate: ";
+	cin >> tri.setBottomLeftX(x);
+	
+	// set y-coordinate	
+	cout << "Enter bottom left y coordinate: ";
+	cin >> x;
+	tri.setBottomLeftY(x);
+	// set length	
+	cout << "Enter length: ";
+	cin >> x;
+	tri.setLength(x);
+	// set height
+	cout << "Enter height: ";
+	cin >> x;
+	tri.setHeight(x);
+}
+
+
+

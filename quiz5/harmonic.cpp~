@@ -1,0 +1,38 @@
+/*
+  File: harmonic.cpp
+  Created by: Joseph Shaffer
+  Creation Date: September 30, 2016
+  Synopsis:
+	This program takes in an input
+	number from the user and calculates
+	the harmonic number of that input 
+	which is the sum of 1 divided by that
+	input where the input is decremented 
+	to 1.
+*/
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+  double sum(0);
+  int n(0);
+
+  cout << "Enter n: ";
+  cin >> n;
+  
+  //int i(1);
+  while (n >= 1) 
+  {
+	cout << 1.0 / n << endl;
+	sum += 1.0/n;
+	cout << sum << endl;
+	n--;
+  }
+
+  cout << "harmonic number = " << sum << endl;
+
+  return 0;
+}

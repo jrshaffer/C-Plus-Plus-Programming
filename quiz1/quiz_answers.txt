@@ -1,0 +1,32 @@
+Answers to quiz #1 questions:
+
+A.Yes	
+
+B.Write your name on the numbered question sheet and turn this in to your instructor before you leave lab.
+Sign the attendance sheet and write the number of your question sheet.
+Submit your work to the designated Carmen drop box before it closes.
+
+C.g++ polynomials.cpp 
+  a.out
+
+D.cp first.cpp second.cpp
+
+E.Sequence of instructions for the computer
+
+F.#include <iostream>
+  using namespace std;
+
+G.cout << "Hello World! << endl;
+  cout << endl;
+  cout << "Goodbye World!"<< endl;
+
+H.Syntax is the set of rules for forming "grammatically" correct statements.
+  Semantics refers to the meaning associated with syntax.
+
+I.Syntax Errors
+
+J.Console Out
+
+K.cout << "Division: " << 2/10 << endl;
+  Logical error because 2/10 would result in Division: 0 as the output instead of Division: 5 like we want, which should be 10/2. It is a logical error as the syntx are fine but we get the wrong output because of the order of the code.
+
