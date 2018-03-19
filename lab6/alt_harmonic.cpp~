@@ -1,0 +1,41 @@
+/*	File: alt_harmonic.cpp
+	Created by: Joseph Shaffer
+	Created on: October 5, 2016
+	Synopsis: The program prompts the user for
+	a whole number that has to be greater than 
+	1. If not given a number greater than 1,
+	the program continously prompts the user
+	for a new whole number. The program
+	computes the alternating harmonic number of
+	the given input, and the higher the input 
+	the closer the harmonic number will be
+	to ln(2), the natural logorithm of 2.
+	So the program converges to ln(2) for the 
+	bigger input numbers from the user.
+*/
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+
+	int n;
+	double sum(0.0);
+
+	cout << "Enter n: ";
+	cin >> n;
+
+	while (n < 1) {
+		cout << "Value n must be 1 or greater. Try again: ";
+		cin >> n;   
+	}
+
+	for (int k = 1; k <= n; k++) {
+		sum += (pow(-1.0, (k + 1)) / k);
+	}
+
+	cout << "The alternating series converges to " << sum << endl;
+
+	return 0;
+}

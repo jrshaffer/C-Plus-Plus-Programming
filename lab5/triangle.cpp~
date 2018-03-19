@@ -1,0 +1,36 @@
+/* File: triangle.cpp
+   Created by: Joseph Shaffer
+   Created on: September 28, 2016
+
+   Synopsis: This program takes in
+   an input from the user for the 
+   number of rows and numbers from 1
+   to the inputted number for the top 
+   row and for each row afterwards,
+   it removes the highest number 
+   creating a triangle with the numbers;
+*/
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+
+	int n, i(1), j(1);
+
+	cout << "Enter number of rows: ";
+	cin >> n;
+	cout << endl;
+
+	while (i <= n) {
+		while (j <= (n - i) + 1) {
+			cout << j % 10;
+			j++;
+		}
+		cout << endl;
+		i++;
+		j = 1;
+	} 
+	return 0;
+}

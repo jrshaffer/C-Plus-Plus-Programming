@@ -1,0 +1,288 @@
+/*
+  File: temps.cpp
+  Created by: Joseph Shaffer
+  Creation Date: December 5,2016
+  Synopsis: This program will collect
+  a list of temperature samples from the 
+  user for a single day. The program
+  will then output the information about
+  each sample to a text file and that text
+  file will also list the average temperature,
+  the hottest temperature and the first sample
+  taken from the user inputted samples.
+*/
+
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+class MilTime
+{
+private:
+	int hour;
+	int minutes;
+
+public:
+	int getHour() const;
+	int getMin() const;
+	void setHour(const int h);
+	void setMin(const int m);
+	
+	void write_out(ofstream & fout);
+};
+
+class Celsius
+{
+private:
+	double degree;
+	MilTime time;
+
+public:
+	// member functions
+	double getTemp() const;
+	MilTime getTime() const;
+	double getFahrenheit() const;
+	
+	void setTemp(const double temp);
+	void setTime(const int h, const int m);
+	
+	void write_out(const string fname) const;
+};
+
+// FUNCTION PROTOTYPES GO HERE:
+string read_filename(const string prompt);
+int read_num_samples(const string prompt);
+Celsius read_sample(const int k);
+void write_to_file(const string filename, const vector<Celsius> & samples);
+double average_temp(const vector<Celsius> samples);
+double hottest_temp(const vector<Celsius> samples);
+MilTime first_sample(const vector<Celsius> samples);
+
+int main()
+{
+  
+	// Define local variables
+	string fname;   	 	// Output file name
+	int n;				// Number of temperature samples
+	vector<Celsius> temps;	// Temperature samples
+	
+	// Prompt for the name of the output file to write
+	fname = read_filename("Enter the output file name: ");
+	
+	// Prompt for the number of temperature samples
+	n = read_num_samples("Enter the number of samples: ");
+	
+	// Read temperature samples from user
+	for (int i = 0; i < n; i++) {
+		cout << endl;
+		temps.push_back(read_sample(i + 1));
+	}
+	
+	// Write the sample information to the outputfile
+	write_to_file(fname, temps);
+	cout << endl;
+  	
+	return 0;
+}
+		 
+// FUNCTION DEFINITIONS GO HERE:
+			 
+// CLASS MEMBER FUNCTION DEFINITINOS GO HERE:
+	
+// Class function that returns the private field of hour for MilTime class
+int MilTime::getHour() const 
+{
+	return hour;
+}
+
+// Class function that returns the private field of minutes for MilTime class
+int MilTime::getMin() const 
+{
+	return minutes;
+}
+
+// Class function that sets the private field of hour for MilTime class
+void MilTime::setHour(const int h) 
+{
+	hour = h;
+}
+
+// Class function that sets the private field of minutes for MilTime class
+void MilTime::setMin(const int m) 
+{
+	minutes = m;
+}
+
+// outputs fields of MilTime object for each sample temp
+// ouputs to file using fout parameter and formats output
+void MilTime::write_out(ofstream & fout)
+{
+	if (hour < 10) {
+		if (minutes < 10) {
+			fout << "0" << hour << ":0" << minutes << endl;
+		} else {
+			fout << "0" << hour << ":" << endl;
+		}
+	} else if (minutes < 10) {
+		fout << hour << ":0" << minutes << endl;
+	} else {
+		fout << hour << ":" << minutes << endl;
+	}
+	
+}
+
+// Class function that returns the private field of degree for Celsius class
+double Celsius::getTemp() const
+{
+	return degree;
+}
+
+// Class function that returns the private field of time for Celsius class
+MilTime Celsius::getTime() const
+{
+	return time;
+}
+
+// Class function that converts celsius to fahrentheit and returns the value for Celsius class
+double Celsius::getFahrenheit() const
+{
+	return degree * 1.80 + 32.0;
+}
+
+// Class function that sets the private field of degree for Celsius class
+void Celsius::setTemp(const double temp) 
+{
+	degree = temp;
+}
+
+// Class function that sets the private fields hour and minutes of the 
+// private object of time in class celsius to given parameters by using
+// MilTime class functions setHour and setMin
+void Celsius::setTime(const int h, const int m) 
+{
+	time.setHour(h);
+	time.setMin(m);
+}
+
+// prompts, reads and returns a file name as a string
+string read_filename(const string prompt)
+{
+	string fileName = "";
+	cout << prompt;
+	cin >> fileName;
+	return fileName;
+}
+
+// prompts, reads, and returns the number of samples from the user
+int read_num_samples(const string prompt)
+{
+	int n;
+	cout << prompt;
+	cin >> n;
+	return n;
+}
+
+// prompts, reads, and returns a Celsius object, with all fields of the
+// object being set by the user
+Celsius read_sample(const int k)
+{
+	Celsius c;
+	double temp;
+	int x, y;
+	cout << "Enter degrees(Celsius): ";
+	cin >> temp;
+	c.setTemp(temp);
+	cout << "Enter hours(Military time): ";
+	cin >> x;
+	cout << "Enter minutes(Military time): ";
+	cin >> y;
+	c.setTime(x, y);
+	return c;
+}
+
+/* Function opens the given file from the filename parameter
+   and writes to the file all the information for each sample
+   temperature stored in the vector parameter
+*/
+void write_to_file(const string filename, const vector<Celsius> & samples)
+{	
+	ofstream fout; // output file handler
+	fout.open(filename.c_str(), ios::out); // open file
+	// Check to see if file did not open
+	if (!fout.is_open()) {
+		cerr << "Unable to open file " << filename << "." << endl;	// Error display
+		exit (10); // Exit if error
+	}
+	
+	fout << "------------------------------------------------------------------" << endl;
+
+	// Output information about each sample inputted by user to 
+	// Loop through each sample of the vector passed to the function
+	for (int i = 0; i < samples.size(); i++) {
+		fout << "Sample #" << i + 1 << ": " << samples[i].getTemp() << " degrees C (or " << samples[i].getFahrenheit() << " degrees F ) at ";
+		samples[i].getTime().write_out(fout);
+	}
+	
+	fout << "---------------------------------------------------------------" << endl;
+	fout << "The average temp is " << average_temp(samples) << " degrees C" << endl; // output average temp
+	fout << "The hottest temp is " << hottest_temp(samples) << " degrees C" << endl; // output hottest temp
+	fout << "The first sample was taken at time ";
+	first_sample(samples).write_out(fout);		// output time of first samples
+
+	fout.close();	// close file
+}
+
+// Calculates and returns the average temperature in degrees celsius for the 
+// vector of samples of temperatures
+double average_temp(const vector<Celsius> samples)
+{
+	double sum = 0.0;
+	for (int i = 0; i < samples.size(); i++) {
+		sum += samples[i].getTemp();
+	}
+	return sum / samples.size();
+}
+
+
+// determines the max temp from the vector of samples of temperatures
+double hottest_temp(const vector<Celsius> samples)
+{
+	double max = samples[0].getTemp();
+	for (int i = 1; i < samples.size(); i++) {
+		if (samples[i].getTemp() > max) {
+			max = samples[i].getTemp();
+		}
+	}
+	return max;
+}
+
+// determines the first temp sample taken (smallest time)
+MilTime first_sample(const vector<Celsius> samples)
+{	
+	MilTime time;
+	int minH = samples[0].getTime().getHour(); // set smallest hour
+	int minM = samples[0].getTime().getMin(); // set smallest minutes
+
+	// for each time of each sample, compare with min time
+	// if lower than min, becomes new min
+	for (int i = 1; i < samples.size(); i++) {
+		if (samples[i].getTime().getHour() < minH) {
+			minH = samples[i].getTime().getHour();
+			minM = samples[i].getTime().getMin();
+		} else if (samples[i].getTime().getHour() == minH && samples[i].getTime().getMin() < minM) {
+			minM = samples[i].getTime().getMin();
+		}
+	}
+	time.setHour(minH);
+	time.setMin(minM);
+	return time;
+}
+
+
+
+

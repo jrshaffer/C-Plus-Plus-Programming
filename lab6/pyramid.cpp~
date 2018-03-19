@@ -1,0 +1,49 @@
+/*	File: pyramid.cpp
+	Created by: Joseph Shaffer
+	Created on: October 5, 2016
+	Synopsis: This program takes
+	an input from the user that has to 
+	be an odd integer. Then the program
+	makes a pyramid from the integer by
+	first outputting a row from the 
+	number 1 to the inputted integer.
+	Then each following row removes
+	the beginning and last number from
+	the previous row. Thus, the final
+	row has 1 number which is the median
+	between 1 and the inputted number.
+*/
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+
+	int n;
+
+	cout << "Enter an odd integer: ";
+	cin >> n;
+
+	while (n % 2 == 0 || n < 1) {
+		cout << "Input cannot be even or less than 1, enter new odd integer: ";
+		cin >> n;
+	}
+
+	cout << endl;
+	
+	for (int i = 1; i <= (n / 2) + 1; i++) {
+		for (int k = 1; k < i; k++) {
+			cout << " ";
+		}
+	
+		for (int l = i; l <= (n - i + 1); l++) {
+			cout << l % 10;
+		}	 
+		
+		cout << endl;
+	}
+						
+	return 0;
+
+}

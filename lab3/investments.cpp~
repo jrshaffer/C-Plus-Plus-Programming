@@ -1,0 +1,41 @@
+// File: investments.cpp
+// Created by: Joseph Shaffer
+// Created on: September 14, 2016
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main()
+{
+	int initInvest, rate, months;
+	double dollars, years, profit, euler(2.71828), finalD, finalP, f;
+
+	cout << "Enter initial investment (dollars): ";
+	cin >> initInvest;
+
+	cout << "Enter interest rate per year (percentage): ";
+	cin >> rate;
+	
+	cout << "Enter number of months: ";
+	cin >> months;
+
+	years = months / 12.0;
+	
+	dollars = initInvest * pow((1.0 + (rate / 100.0)), years);
+	profit = dollars - initInvest;
+
+	cout << "Value of your investment compounded annually after " << years << " year(s) is " << dollars << " dollars." << endl;
+	cout << "Profit from your investment after " << years << " years(s) is " << profit << " dollars." << endl << endl;
+
+	finalD = initInvest * pow(euler, ((rate / 100.0) * years));
+	finalP = finalD - initInvest;
+	f = finalP - profit;
+
+	cout << "Value of your investment continuously compounded after " << years << " year(s) is " << finalD << " dollars." << endl;
+	cout << "Profit from this investment is " << finalP << " dollars." << endl << endl;
+
+	cout << "The difference between both investment types is " << f << " dollars." << endl;
+
+	return 0;
+}	
